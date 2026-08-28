@@ -4,7 +4,7 @@ services:
     runtime: node
     buildCommand: npm install && npm run build
     startCommand: npm run server
-    repo:  https://github.com/zoom/zoom-rtms-sentiment-sample
+    repo:  https://github.com/zoom/videosdk-LTT-sentiment-analysis
     rootDir: .
     plan: free
     envVars:
