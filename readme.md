@@ -7,7 +7,7 @@ The [Zoom Video SDK for web](https://developers.zoom.us/docs/video-sdk/web/) ena
 ## Installation
 To get started, clone the repo:
 
-`git clone https://github.com/zoom/videosdk-sentiment-analysis-sample.git`
+`git clone https://github.com/zoom/videosdk-LTT-sentiment-analysis.git`
 
 
 ## Quick Deploy
