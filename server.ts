@@ -14,10 +14,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 const sdkKey = process.env.ZOOM_SDK_KEY;
 const sdkSecret = process.env.ZOOM_SDK_SECRET;
-// Render (and most hosts) inject PORT; fall back to a default.
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-// The public URL the frontend should call for the API. Render sets this automatically;
-// ENDPOINT_URL lets you override it (e.g. for local split frontend/backend dev).
 const endpointUrl = process.env.RENDER_EXTERNAL_URL || process.env.ENDPOINT_URL || null;
 
 const app = express();
@@ -27,7 +24,6 @@ app.use("/models", express.static(path.join(__dirname, "models")));
 
 let vite: import("vite").ViteDevServer | undefined;
 
-// Same signing logic as generateToken.ts, exposed over HTTP instead of the CLI.
 function generateSignature(
 	sessionName: string,
 	role: number,
@@ -80,15 +76,10 @@ app.get("/zoomtoken", (req, res) => {
 	res.json({ token });
 });
 
-// Lets the browser read server-side .env values at runtime instead of relying on Vite's import.meta.env.
 app.get("/config", (_req, res) => {
 	res.json({ endpointUrl });
 });
 
-// Register API routes above before mounting Vite, so Express matches them first;
-// Vite's middleware chain never calls next() for unmatched extension-less paths.
-// In dev, run Vite in middleware mode so it handles asset serving + HMR in-process;
-// in production, just serve the pre-built dist/ output.
 if (!isProduction) {
 	const { createServer } = await import("vite");
 	vite = await createServer({
@@ -101,7 +92,6 @@ if (!isProduction) {
 	app.use(express.static(distDir));
 }
 
-// SPA fallback so client-side routes (and the root path) resolve to the built app.
 app.get(/^(?!\/zoomtoken|\/config).*/, async (req, res, next) => {
 	try {
 		if (vite) {
