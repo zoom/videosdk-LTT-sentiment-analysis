@@ -3,12 +3,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import KJUR from "jsrsasign";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 dotenv.config({ quiet: true });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, "dist");
+const isProduction = process.env.NODE_ENV === "production";
 
 const sdkKey = process.env.ZOOM_SDK_KEY;
 const sdkSecret = process.env.ZOOM_SDK_SECRET;
@@ -20,9 +22,10 @@ const endpointUrl = process.env.RENDER_EXTERNAL_URL || process.env.ENDPOINT_URL 
 
 const app = express();
 app.use(cors());
-app.use(express.static(distDir));
 // models/ lives outside dist, so serve it explicitly for the browser/worker fetches.
 app.use("/models", express.static(path.join(__dirname, "models")));
+
+let vite: import("vite").ViteDevServer | undefined;
 
 // Same signing logic as generateToken.ts, exposed over HTTP instead of the CLI.
 function generateSignature(
@@ -82,9 +85,37 @@ app.get("/config", (_req, res) => {
 	res.json({ endpointUrl });
 });
 
+// Register API routes above before mounting Vite, so Express matches them first;
+// Vite's middleware chain never calls next() for unmatched extension-less paths.
+// In dev, run Vite in middleware mode so it handles asset serving + HMR in-process;
+// in production, just serve the pre-built dist/ output.
+if (!isProduction) {
+	const { createServer } = await import("vite");
+	vite = await createServer({
+		root: __dirname,
+		server: { middlewareMode: true },
+		appType: "custom",
+	});
+	app.use(vite.middlewares);
+} else {
+	app.use(express.static(distDir));
+}
+
 // SPA fallback so client-side routes (and the root path) resolve to the built app.
-app.get(/^(?!\/zoomtoken|\/config).*/, (_req, res) => {
-	res.sendFile(path.join(distDir, "index.html"));
+app.get(/^(?!\/zoomtoken|\/config).*/, async (req, res, next) => {
+	try {
+		if (vite) {
+			// Dev: let Vite inject HMR client/import maps into the raw index.html.
+			const raw = fs.readFileSync(path.join(__dirname, "index.html"), "utf-8");
+			const html = await vite.transformIndexHtml(req.originalUrl, raw);
+			res.status(200).set({ "Content-Type": "text/html" }).end(html);
+		} else {
+			res.sendFile(path.join(distDir, "index.html"));
+		}
+	} catch (err) {
+		vite?.ssrFixStacktrace(err as Error);
+		next(err);
+	}
 });
 
 app.listen(port, () => {

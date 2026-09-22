@@ -3,7 +3,7 @@ services:
     name: Zoom Sentiment Analysis with Live Transcription
     runtime: node
     buildCommand: npm install && npm run build
-    startCommand: npm run server
+    startCommand: npm run start
     repo:  https://github.com/zoom/videosdk-LTT-sentiment-analysis
     rootDir: .
     plan: free

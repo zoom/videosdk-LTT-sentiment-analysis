@@ -8,41 +8,58 @@
   <title>Zoom VideoSDK Transcript Sentiment Analysis</title>
 </head>
 
-<body class="flex flex-1 flex-col h-full min-h-screen relative">
-  <h1 class="text-3xl font-bold text-center my-4">Zoom VideoSDK Closed Captions</h1>
-  <div class="flex flex-row self-center">
-    <button id="start-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4 w-64 hover:bg-blue-600 active:bg-blue-700 self-center">
-      Join
-    </button>
-    <div id="ai-form" class="hidden flex flex-col self-center">
-        <div>       
-          <input type="range" id="sample-size" name="sample-size" min="1" max="500" value="250" class="w-64">
-          <span id="sample-size-output">Training Sample Size: 250</span>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-800 antialiased">
+  <header class="sticky top-0 z-10 border-b border-slate-200/70 bg-white/80 backdrop-blur">
+    <div class="max-w-5xl mx-auto px-6 py-5">
+      <h1 class="text-2xl font-semibold tracking-tight text-slate-900">Zoom VideoSDK Sentiment Analysis - LTT</h1>
+      <p class="text-sm text-slate-500 mt-1">Live transcription with real-time sentiment analysis</p>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-10 flex flex-col gap-8 pb-24">
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col items-center gap-5">
+      <button id="start-btn" class="bg-indigo-600 text-white font-semibold py-2.5 px-4 rounded-lg w-64 shadow-sm transition-colors hover:bg-indigo-700 active:bg-indigo-800 disabled:opacity-60 disabled:cursor-not-allowed">
+        Join
+      </button>
+      <div id="ai-form" class="hidden flex-col items-center gap-6 w-full max-w-sm">
+        <div class="w-full">
+          <div class="flex justify-between items-baseline mb-1.5">
+            <label for="sample-size" class="text-sm font-medium text-slate-600">Training data</label>
+            <span id="sample-size-output" class="text-sm font-semibold text-slate-800">Training Sample Size: 250</span>
+          </div>
+          <input type="range" id="sample-size" name="sample-size" min="1" max="500" value="250" class="w-full accent-indigo-600">
         </div>
 
-        <div>
-          <input type="range" id="epochs" name="epochs" min="1" max="100" value="50"  class="w-64">
-          <span id="epochs-output">Epochs: 50</span>
+        <div class="w-full">
+          <div class="flex justify-between items-baseline mb-1.5">
+            <label for="epochs" class="text-sm font-medium text-slate-600">Training cycles</label>
+            <span id="epochs-output" class="text-sm font-semibold text-slate-800">Epochs: 50</span>
+          </div>
+          <input type="range" id="epochs" name="epochs" min="1" max="100" value="50" class="w-full accent-indigo-600">
         </div>
-        
-        <button id="ai-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4 w-64 hover:bg-blue-600 active:bg-blue-700 self-center">
-         Reset AI 
-        </button>
-        <button id="stop-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4 w-64 hover:bg-blue-600 active:bg-blue-700 self-center">
-          Leave
-        </button>
 
-        <div class="flex w-full justify-center">
-          <span id="sentiment" class="font-bold py-2 px-4 mb-4">Detected Sentiment: </span>
+        <div class="flex gap-3 w-full">
+          <button id="ai-btn" class="flex-1 bg-slate-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm transition-colors hover:bg-slate-800 active:bg-slate-900 disabled:opacity-60 disabled:cursor-not-allowed">
+            Reset AI
+          </button>
+          <button id="stop-btn" class="flex-1 bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg shadow-sm transition-colors hover:bg-red-700 active:bg-red-800">
+            Leave
+          </button>
         </div>
-     </div>
-  </div>
 
-  <video-player-container class="max-w-[65rem] max-h-[65rem]"></video-player-container>
-  <div class="text-center absolute bottom-2 w-full">
+        <span id="sentiment" class="inline-flex items-center justify-center rounded-full bg-slate-100 px-4 py-1.5 text-sm font-semibold text-slate-700 border border-slate-200 w-full text-center">Detected Sentiment: </span>
+      </div>
+    </section>
+
+    <section id="video-section" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+      <video-player-container class="max-w-[65rem] max-h-[65rem] mx-auto rounded-xl overflow-hidden"></video-player-container>
+    </section>
+  </main>
+
+  <footer class="fixed bottom-0 inset-x-0 bg-white/85 backdrop-blur border-t border-slate-200 text-center text-xs text-slate-500 py-2.5 px-4">
     Do not expose your SDK Secret to the client, when using this in production
     please make sure to use a backend service to sign tokens.
-  </div>
+  </footer>
   <!-- <script src="/coi-serviceworker.js"></script> -->
   <script type="module" src="/src/main.ts"></script>
 </body>

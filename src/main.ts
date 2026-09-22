@@ -18,6 +18,7 @@ await client.init("en-US", "Global", { patchJsMedia: false, });
 const startBtn = document.querySelector("#start-btn") as HTMLButtonElement;
 const stopBtn = document.querySelector("#stop-btn") as HTMLButtonElement;
 const aiform = document.querySelector("#ai-form") as HTMLDivElement;
+const videoSection = document.querySelector("#video-section") as HTMLElement;
 const aiBtn = document.querySelector("#ai-btn") as HTMLButtonElement;
 const sampleSize = document.getElementById('sample-size') as HTMLInputElement; 
 const epochs = document.getElementById('epochs') as HTMLInputElement;
@@ -92,6 +93,7 @@ const startCall = async () => {
         startBtn.innerHTML = "Connected";
         startBtn.style.display = "none";
         aiform.style.display = "flex";
+        videoSection.style.display = "block";
 
         sampleSize.oninput = () => {
             sampleSizeOutput.innerHTML = `Training Sample Size: ${sampleSize.value}`;
@@ -187,6 +189,7 @@ stopBtn.addEventListener("click", async () => {
     startBtn.innerHTML = "Join";
     startBtn.disabled = false;
     aiform.style.display = "none";
+    videoSection.style.display = "none";
 });
 
 aiBtn.addEventListener("click", async () => {

@@ -58,7 +58,15 @@ if (typeof window === "undefined") {
             headers: newHeaders,
           });
         })
-        .catch((e) => console.error(e))
+        .catch((e) => {
+          console.error(e);
+          // respondWith() requires a Response; without this, a failed fetch
+          // rejects with "Failed to convert value to 'Response'" instead.
+          return new Response(null, {
+            status: 500,
+            statusText: e instanceof Error ? e.message : "Service worker fetch failed",
+          });
+        })
     );
   });
 } else {
