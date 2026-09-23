@@ -4,6 +4,8 @@ Use of this sample app is subject to our [Terms of Use](https://explore.zoom.us/
 
 The [Zoom Video SDK for web](https://developers.zoom.us/docs/video-sdk/web/) enables you to build custom video experiences on a webpage with Zoom's core technology. This demo showcases how to use a [media processor](https://developers.zoom.us/docs/video-sdk/web/raw-data) to display closed captions on user video and screenshare. It uses the Video SDK [Live transcription](https://developers.zoom.us/docs/video-sdk/web/transcription-translation/) feature.
 
+There is also a [Server-side](https://github.com/zoom/videosdk-rtms-sentiment-analysis) version of this app that uses Zoom RealTime Media Streams.
+
 ## Installation
 To get started, clone the repo:
 
