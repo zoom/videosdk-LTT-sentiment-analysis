@@ -36,7 +36,7 @@ The script generates a token for the proivded session name and the `--copy-to-cl
 
 ## Usage
 
-1. Navigate to http://localhost:5173
+1. Navigate to http://localhost:3000
 
 1. Click "Join" to join the session
 

@@ -45,6 +45,7 @@ function generateSignature(
 	return KJUR.KJUR.jws.JWS.sign("HS256", sHeader, sPayload, sdkSecret!);
 }
 
+// Zoom token generation endpoint
 app.get("/zoomtoken", (req, res) => {
 	if (!sdkKey || !sdkSecret) {
 		res.status(500).json({
@@ -76,6 +77,7 @@ app.get("/zoomtoken", (req, res) => {
 	res.json({ token });
 });
 
+// Server configuration endpoint
 app.get("/config", (_req, res) => {
 	res.json({ endpointUrl });
 });
